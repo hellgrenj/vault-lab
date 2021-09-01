@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +9,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
+var jsonString = File.ReadAllText("/vault/secrets/api");
+var secrets = JsonSerializer.Deserialize<JsonElement>(jsonString);
+var data = secrets.GetProperty("data");
+var theSecret = data.GetProperty("pw").ToString();
+
 
 // configure and start web server
 await Host.CreateDefaultBuilder(args)
@@ -40,7 +49,7 @@ IEndpointRouteBuilder Routes(IEndpointRouteBuilder e)
 }
 async Task IndexHandler(HttpContext context)
 {
-    var response = new OperationResult(true, "Hello world");
+    var response = new OperationResult(true, theSecret);
     await context.Response.WriteAsJsonAsync(response);
 }
 
