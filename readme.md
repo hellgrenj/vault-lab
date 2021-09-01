@@ -15,7 +15,7 @@ Setup Vault
 
 
 Setup CLI
-1. download and install CLI
+1. download and install CLI (https://www.vaultproject.io/downloads)
 2. run ```export VAULT_ADDR='http://127.0.0.1:8200'```
 3. run ```export VAULT_TOKEN="s.XmpNPoi9sRhYtdKHaQhkHP6x"``` (**replace token with Initial Root Token from file init-output.txt**)
 4. vault login <token> (same as exported VALUE_TOKEN in previous step)
