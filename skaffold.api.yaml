@@ -1,0 +1,15 @@
+apiVersion: skaffold/v2beta11
+kind: Config
+metadata:
+  name: vault-lab
+build:
+  artifacts:
+  - image: vault-lab-api
+    context: api
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubeContext: docker-desktop
+  kubectl:
+    manifests:
+    - k8s/app/*.yaml

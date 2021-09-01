@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:  
+  labels:
+    app: api
+  name: api
+spec:
+  ports:
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+  selector:
+    app: api
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api
+  name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: api
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-inject-secret-api: secrets/example-api
+        vault.hashicorp.com/agent-inject-default-template: json
+        vault.hashicorp.com/role: 'example'
+    spec:
+      serviceAccountName: vault-auth
+      containers:
+        - image: vault-lab-api
+          name: vault-lab-api
+          # env:
+          # - name: VAULT_ADDR
+          #   value: "http://vault-0:8200"
+          # - name: VAULT_TOKEN
+          #   value: s.0OB0z19VBX2W1h11gwnk0XGx
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}
