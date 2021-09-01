@@ -2,7 +2,7 @@
 
 ## prerequisites
 docker-desktop with kubernetes enabled  
-kubectl installed and configured to talk to local docker-desktop k8s  
+kubectl installed and configured to talk to local docker-desktop cluster  
 skaffold installed  
 
 Setup Vault  
