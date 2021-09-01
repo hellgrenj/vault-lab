@@ -1,3 +1,10 @@
+**This is a work in progress**
+
+## prerequisites
+docker-desktop with kubernetes enabled  
+kubectl installed and configured to talk to local docker-desktop k8s  
+skaffold installed  
+
 Setup Vault  
 1. helm repo add hashicorp https://helm.releases.hashicorp.com  
 2. helm repo update  
