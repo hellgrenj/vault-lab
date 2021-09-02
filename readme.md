@@ -20,7 +20,7 @@ Setup CLI
 3. run ```export VAULT_TOKEN="s.XmpNPoi9sRhYtdKHaQhkHP6x"``` (**replace token with Initial Root Token from file init-output.txt**)
 4. vault login <token> (same as exported VALUE_TOKEN in previous step)
 
-TEST manually
+Test manually
 1. in UI (localhost:8200) login with token 
 2. create a new secrets engine of type kv (key value) and call it **secrets**
 3. then create a secret via the CLI: ```vault kv put secrets/example-api pw=testar```
@@ -38,9 +38,8 @@ Start API and verify that the secret gets injected to the pod
 
 2. verify that the secret was injected:  
 2.1 run ```k exec --stdin --tty api-75484987f6-2dlmk -- /bin/ash``` to shell in to the container (replace with correct pod name api-xyz)   
-2.2 check that the secret exists (in json format) at /vault/secrets (```cat /vault/secrets/api```)
-
-
+2.2 check that the secret exists (in json format) at /vault/secrets (```cat /vault/secrets/api```)  
+3. Navigate to localhost:8080 it should now return the secret you create in step 3 under Test manually  
 
 After restart (i.e skaffold delete -f skaffold.vault.ayml && skaffold run -f skaffold.vault.yaml)  
 1. repeat step 5 from Setup Vault above
