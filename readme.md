@@ -4,6 +4,7 @@
 docker-desktop with kubernetes enabled  
 kubectl installed and configured to talk to local docker-desktop cluster  
 skaffold installed  
+helm installed. 
 
 Setup Vault  
 1. helm repo add hashicorp https://helm.releases.hashicorp.com  
