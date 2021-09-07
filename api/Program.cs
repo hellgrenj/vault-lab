@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -10,11 +9,23 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-var jsonString = File.ReadAllText("/vault/secrets/api");
-var secrets = JsonSerializer.Deserialize<JsonElement>(jsonString);
-var data = secrets.GetProperty("data");
-var theSecret = data.GetProperty("pw").ToString();
 
+// fetch secret from disk (and re-fetch if it changes...)
+var secretsPath = "/vault/secrets";
+string theSecret = FetchSecretFromDisk();
+using var watcher = new FileSystemWatcher(secretsPath);
+watcher.NotifyFilter = NotifyFilters.LastWrite;
+watcher.Changed += (object sender, FileSystemEventArgs e) => { if (e.ChangeType == WatcherChangeTypes.Changed) { theSecret = FetchSecretFromDisk(); } };
+watcher.EnableRaisingEvents = true;
+string FetchSecretFromDisk()
+{
+    var jsonString = File.ReadAllText($"{secretsPath}/api");
+    var secrets = JsonSerializer.Deserialize<JsonElement>(jsonString);
+    var data = secrets.GetProperty("data");
+    var s = data.GetProperty("pw").ToString();
+    Console.WriteLine($"Secret is now {s}"); // do not log the secret.. only for demo purposes!
+    return s;
+}
 
 // configure and start web server
 await Host.CreateDefaultBuilder(args)
@@ -47,10 +58,12 @@ IEndpointRouteBuilder Routes(IEndpointRouteBuilder e)
     e.MapGet("/", context => IndexHandler(context));
     return e;
 }
+
+// return the secret in an operation result object as JSON
 async Task IndexHandler(HttpContext context)
 {
     var response = new OperationResult(true, theSecret);
     await context.Response.WriteAsJsonAsync(response);
 }
 
-public record OperationResult (bool Successful, string Message);
+public record OperationResult(bool Successful, string Message);
