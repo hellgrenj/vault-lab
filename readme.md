@@ -41,6 +41,7 @@ Start API and verify that the secret gets injected to the pod
 2.1 run ```k exec --stdin --tty api-75484987f6-2dlmk -- /bin/ash``` to shell in to the container (replace with correct pod name api-xyz)   
 2.2 check that the secret exists (in json format) at /vault/secrets (```cat /vault/secrets/api```)  
 3. Navigate to localhost:8080 it should now return the secret you create in step 3 under Test manually  
+4. Try creating a new version of the secret and verify that it gets updated by visiting localhost:8080 again  
 
 After restart (i.e skaffold delete -f skaffold.vault.ayml && skaffold run -f skaffold.vault.yaml)  
 1. repeat step 5 from Setup Vault above
