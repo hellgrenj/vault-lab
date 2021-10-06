@@ -1,6 +1,5 @@
 proof-of-concept: Hashicorp Vault with k8s, Helm and Skaffold
 
-**This is a work in progress**
 
 ## prerequisites
 docker-desktop with kubernetes enabled  
